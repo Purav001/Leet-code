@@ -15,15 +15,17 @@ public:
         // dp.resize(n,vector<int>(amount+1,-1));
         // return solve(coins,n-1,amount);
         vector<vector<unsigned long long>> dp(n,vector<unsigned long long>(amount+1,0));
-        for(int i=0;i<=amount;i++) dp[0][i]= (i%coins[0]==0);
+        vector<unsigned long long> curr(amount+1,0),prev(amount+1,0);
+        for(int i=0;i<=amount;i++) prev[i]= (i%coins[0]==0);
         for(int i=1;i<n;i++){
             for(int k=0;k<=amount;k++){
-                unsigned long long nt=dp[i-1][k];
+                unsigned long long nt=prev[k];
                 unsigned long long t= 0;
-                if (k>=coins[i]) t=dp[i][k-coins[i]];
-                dp[i][k]=(nt+t);
+                if (k>=coins[i]) t=curr[k-coins[i]];
+                curr[k]=(nt+t);
             }
+            prev=curr;
         }
-        return dp[n - 1][amount];
+        return prev[amount];
     }
 };
