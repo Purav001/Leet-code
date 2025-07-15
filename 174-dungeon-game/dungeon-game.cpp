@@ -23,19 +23,25 @@ public:
 
         // tabulation
 
-        dp.resize(m,vector<int>(n,1e9));
+        // dp.resize(m,vector<int>(n,1e9));
+
+        // space optimised
+
+        vector<int> next(n,1e9),curr(n,1e9);
+        next[n-1]=max(1,1-dungeon[m-1][n-1]);
         for(int i=m-1;i>=0;i--){
             for(int j=n-1;j>=0;j--){
-                if(i==m-1 && j==n-1) dp[i][j]=max(1,1-dungeon[i][j]);
+                if(i==m-1 && j==n-1) curr[j]=next[j];
                 else{
                     int d=INT_MAX,r=INT_MAX;
-                    if(i<m-1) d=dp[i+1][j];
-                    if(j<n-1) r=dp[i][j+1];
+                    if(i<m-1) d=next[j];
+                    if(j<n-1) r=curr[j+1];
                     int need=min(d,r)-dungeon[i][j];
-                    dp[i][j]=max(1,need);
+                    curr[j]=max(1,need);
                 }
             }
+            next=curr;
         }
-        return dp[0][0];
+        return curr[0];
     }
 };
