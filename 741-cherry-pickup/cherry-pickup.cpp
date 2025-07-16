@@ -78,26 +78,32 @@ public:
 
         // tabulation
 
-        dp.resize(n,vector<vector<int>>(n,vector<int>(n,-1e8)));
+        // dp.resize(n,vector<vector<int>>(n,vector<int>(n,-1e8)));
+
+        // space optimisation
+
+        vector<vector<int>> next(n,vector<int>(n,-1e8));
         for(int i=n-1;i>=0;i--){
+            vector<vector<int>> curr(n,vector<int>(n,-1e8));
             for(int j=n-1;j>=0;j--){
                 for(int x=n-1;x>=0;x--){
-                    if(i==n-1 && j==n-1 && x==n-1) dp[i][j][x]=grid[i][j];
+                    if(i==n-1 && j==n-1 && x==n-1) curr[j][x]=grid[i][j];
                     else{
                         int y=i+j-x;
                         if(y<0 || y>=n || grid[i][j]==-1 || grid[x][y]==-1) continue;
-                        int curr=grid[i][j];
-                        if(i!=x || j!=y) curr+=grid[x][y];
+                        int val=grid[i][j];
+                        if(i!=x || j!=y) val+=grid[x][y];
                         int best=-1e8;
-                        if(i+1<n && y+1<n) best=max(best,dp[i+1][j][x]);
-                        if(i+1<n && x+1<n) best=max(best,dp[i+1][j][x+1]);
-                        if(j+1<n && y+1<n) best=max(best,dp[i][j+1][x]);
-                        if(j+1<n && x+1<n) best=max(best,dp[i][j+1][x+1]);
-                        if(best!=-1e8) dp[i][j][x]=curr+best;
+                        if(i+1<n && y+1<n) best=max(best,next[j][x]);
+                        if(i+1<n && x+1<n) best=max(best,next[j][x+1]);
+                        if(j+1<n && y+1<n) best=max(best,curr[j+1][x]);
+                        if(j+1<n && x+1<n) best=max(best,curr[j+1][x+1]);
+                        if(best!=-1e8) curr[j][x]=val+best;
                     }
                 }
             }
+            next=curr;
         }
-        return max(0,dp[0][0][0]);
+        return max(0,next[0][0]);
     }
 };
