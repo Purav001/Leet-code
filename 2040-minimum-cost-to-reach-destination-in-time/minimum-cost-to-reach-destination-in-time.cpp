@@ -10,9 +10,7 @@ public:
         }
         priority_queue<tuple<int,int,int>,vector<tuple<int,int,int>>,greater<tuple<int,int,int>>> pq;
         pq.push({passingFees[0],0,0});
-        vector<vector<int>> dp(n,vector<int>(maxTime+1,1e9));
-        // we use dp because there are multipe paths to reach same node
-        // dp[i][t] tells the minimum cost to reach node i in time -t
+        vector<int> dist(n,1e9);
         while(!pq.empty()){
             auto [fee,t,u]=pq.top();
             pq.pop();
@@ -21,8 +19,8 @@ public:
                 int nt=t+time; // nt- new time
                 if(nt>maxTime) continue;
                 int nc=fee+passingFees[v]; // nc- new cost
-                if(dp[v][nt]>nc){
-                    dp[v][nt]=nc;
+                if(dist[v]>nt){
+                    dist[v]=nt;
                     pq.push({nc,nt,v});
                 }
             }
