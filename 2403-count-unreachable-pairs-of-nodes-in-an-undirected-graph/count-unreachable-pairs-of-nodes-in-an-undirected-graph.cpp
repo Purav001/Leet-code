@@ -15,23 +15,17 @@ public:
             adj[v].push_back(u);
         }
         vector<bool> visited(n,false);
-        vector<int> sub;
+        long long ans=0;
+        int islands=n;
         // count number of connected nodes in each connection and store it
         for(int i=0;i<n;i++){
             if(!visited[i]){
                 int cnt=0;
                 dfs(adj,i,cnt,visited);
-                sub.push_back(cnt);
+                // calculate the number of pairs
+                ans+=1LL*(cnt)*(islands-cnt);
+                islands-=cnt;
             }
-        }
-        long long sum=0;
-        for(int i:sub) sum+=i;
-        long long ans=0;
-        // calculate the number of pairs
-        for(int i=0;i<sub.size();i++){
-            int el=sub[i];
-            sum-=el;
-            ans+=1LL*el*sum;
         }
         return ans;
     }
