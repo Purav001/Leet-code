@@ -46,26 +46,51 @@ public:
 
         // tabulation
 
-        vector<vector<vector<long long>>> dp(n+1,vector<vector<long long>>(3,vector<long long>(k+1,0)));
+        // vector<vector<vector<long long>>> dp(n+1,vector<vector<long long>>(3,vector<long long>(k+1,0)));
+        // for(int i=0;i<=k;i++){
+        //     dp[n][0][i]=0;
+        //     dp[n][1][i]=-1e14;
+        //     dp[n][2][i]=-1e14;
+        // }
+        // for(int i=n-1;i>=0;i--){
+        //     for(int j=0;j<=2;j++){
+        //         for(int l=0;l<=k;l++){
+        //             long long nt=dp[i+1][j][l]; // nt - not take
+        //             long long t=-1e14; // t- take
+        //             if(l>0){
+        //                 if(j==0) t=max(-prices[i]+dp[i+1][1][l],prices[i]+dp[i+1][2][l]); // either long buy or short sell
+        //                 else if(j==1) t=prices[i]+dp[i+1][0][l-1]; // long buy
+        //                 else t=-prices[i]+dp[i+1][0][l-1]; // short sell
+        //             }
+        //             dp[i][j][l]=max(t,nt);
+        //         }
+        //     }
+        // }
+        // return dp[0][0][k];
+
+        // space optimisation
+
+        vector<vector<long long>> next(3,vector<long long>(k+1,0)),curr(3,vector<long long>(k+1,0));
         for(int i=0;i<=k;i++){
-            dp[n][0][i]=0;
-            dp[n][1][i]=-1e14;
-            dp[n][2][i]=-1e14;
+            next[0][i]=0;
+            next[1][i]=-1e14;
+            next[2][i]=-1e14;
         }
         for(int i=n-1;i>=0;i--){
             for(int j=0;j<=2;j++){
                 for(int l=0;l<=k;l++){
-                    long long nt=dp[i+1][j][l]; // nt - not take
+                    long long nt=next[j][l]; // nt - not take
                     long long t=-1e14; // t- take
                     if(l>0){
-                        if(j==0) t=max(-prices[i]+dp[i+1][1][l],prices[i]+dp[i+1][2][l]); // either long buy or short sell
-                        else if(j==1) t=prices[i]+dp[i+1][0][l-1]; // long buy
-                        else t=-prices[i]+dp[i+1][0][l-1]; // short sell
+                        if(j==0) t=max(-prices[i]+next[1][l],prices[i]+next[2][l]); // either long buy or short sell
+                        else if(j==1) t=prices[i]+next[0][l-1]; // long buy
+                        else t=-prices[i]+next[0][l-1]; // short sell
                     }
-                    dp[i][j][l]=max(t,nt);
+                    curr[j][l]=max(t,nt);
                 }
             }
+            next=curr;
         }
-        return dp[0][0][k];
+        return next[0][k];
     }
 };
