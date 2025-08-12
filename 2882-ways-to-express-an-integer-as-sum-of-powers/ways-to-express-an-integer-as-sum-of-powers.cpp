@@ -24,7 +24,9 @@ public:
         // dp.resize(n+1,vector<int>(n+1,-1));
         // return solve(1,n,x);
 
-        // tabulation
+        // precompute pow to avoid pow() floating point and also reduces the search space by reducing it to a limited number whos x raised power is just less than n
+        // else we were traversing till n
+        
         vector<int> pow;
         for(int j=1; ;j++){
             long long val=1;
@@ -33,16 +35,34 @@ public:
             pow.push_back((int)val);
         }
         int m=pow.size();
-        vector<vector<int>> dp(n+1,vector<int>(m+2,0));
-        for(int i=0;i<=m+1;i++) dp[0][i]=1;
-        for(int i=1;i<=n;i++){
-            for(int j=m;j>=1;j--){
-                int nt= dp[i][j+1];
+
+        // tabulation
+
+        // vector<vector<int>> dp(n+1,vector<int>(m+2,0));
+        // for(int i=0;i<=m+1;i++) dp[0][i]=1;
+        // for(int i=1;i<=n;i++){
+        //     for(int j=m;j>=1;j--){
+        //         int nt= dp[i][j+1];
+        //         int t=0;
+        //         if(i>=pow[j-1]) t=dp[i-pow[j-1]][j+1];
+        //         dp[i][j]=(t+nt)%MOD;
+        //     }
+        // }
+        // return dp[n][1];
+
+        // space optimisation
+
+        vector<int> next(n+1,0),curr(n+1,0);
+        next[0]=1;
+        for (int j=m-1; j>=0;j--) {          
+            for (int sum=0; sum<=n;sum++) {   
+                int nt=next[sum];                
                 int t=0;
-                if(i>=pow[j-1]) t=dp[i-pow[j-1]][j+1];
-                dp[i][j]=(t+nt)%MOD;
+                if (sum >= pow[j]) t =next[sum - pow[j]]; 
+                curr[sum]=(t + nt)% MOD;
             }
+            next=curr;
         }
-        return dp[n][1];
+        return next[n];  
     }
 };
