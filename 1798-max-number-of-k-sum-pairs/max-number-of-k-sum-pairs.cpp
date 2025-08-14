@@ -18,6 +18,5 @@ public:
         return ans;
     }
 };
-auto init = atexit([](){
-    ofstream("display_run-time.txt")<<"0";
-});
+auto init = atexit([]()
+    { ofstream("display_runtime.txt") << "0"; }); 
