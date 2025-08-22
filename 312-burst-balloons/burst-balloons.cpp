@@ -24,43 +24,32 @@ public:
     //     }
     //     return dp[i][j]=mini;
     // }
-    
-    vector<vector<long long>> dp;
-    long long solve(vector<int>& nums,int i,int j){
-        if(i>j) return 0;
-        if(dp[i][j]!=-1) return dp[i][j];
-        long long maxi=LLONG_MIN;
-        for(int k=i;k<=j;k++){
-            long long coin=(1ll*nums[i-1]*nums[k]*nums[j+1])+solve(nums,i,k-1)+solve(nums,k+1,j);
-            if(coin>maxi) maxi=coin;
-        }
-        return dp[i][j]=maxi;
-    }
 
     int maxCoins(vector<int>& nums) {
         int n=nums.size();
         nums.push_back(1);
         nums.insert(nums.begin(),1);
+
         // memoisation
 
-        dp.resize(n+1,vector<long long>(n+1,-1));
-        return (int)solve(nums,1,n);
+        // dp.resize(n+1,vector<long long>(n+1,-1));
+        // return (int)solve(nums,1,n);
 
         // tabulation
 
-        // vector<vector<long long>> dp(n+2,vector<long long>(n+2,0));
-        // for(int i=n;i>=1;i--){
-        //     for(int j=1;j<=n;j++){
-        //         if(i>j) continue;
-        //         long long mini= LLONG_MIN;
-        //         for(int k=i;k<=j;k++){
-        //             long long coin= nums[i-1]*nums[k]*nums[j+1]+ dp[i][k-1]+ dp[k+1][j];
-        //             if(coin>mini) mini=coin;
-        //         }
-        //         dp[i][j]=mini;
-        //     }
-        // }
-        // return dp[1][n];
+        vector<vector<long long>> dp(n+2,vector<long long>(n+2,0));
+        for(int i=n;i>=1;i--){
+            for(int j=1;j<=n;j++){
+                if(i>j) continue;
+                long long maxi=LLONG_MIN;
+                for(int k=i;k<=j;k++){
+                    long long coin=(nums[i-1]*nums[k]*nums[j+1])+dp[i][k-1]+dp[k+1][j];
+                    if(coin>maxi) maxi=coin;
+                }
+                dp[i][j]=maxi;
+            }
+        }
+        return (int)dp[1][n];
     }
 };
 auto init = atexit([]()
