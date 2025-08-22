@@ -2,7 +2,7 @@ class Solution {
 public:
     // partition dp
     // in it we need to maximise the coins we get after bursting the ballons
-    // after each burst the rest ballon are nstill dependent on prev and next ballon coins, so we cannot divide the problem into two independent problem 
+    // after each burst the rest ballon are still dependent on prev and next ballon coins, so we cannot divide the problem into two independent problem 
     // hence we try reverse psycology 
     // eg nums= [3,1,5,8]
     // [3,5,8]
@@ -19,11 +19,23 @@ public:
     //     if(dp[i][j]!=-1) return dp[i][j];
     //     long long mini= LLONG_MIN;
     //     for(int k=i;k<=j;k++){
-    //         long long coin=(nums[i-1]*nums[k]*nums[j+1])+solve(nums,i,k-1)+solve(nums,k+1,j); // now these two subproblems are independen and they only depned on the current ballon that is nums[k]
+    //         long long coin=(nums[i-1]*nums[k]*nums[j+1])+solve(nums,i,k-1)+solve(nums,k+1,j); // now these two subproblems are independent and they only depned on the current ballon that is nums[k]
     //         if(coin>mini) mini=coin;
     //     }
     //     return dp[i][j]=mini;
     // }
+    
+    vector<vector<long long>> dp;
+    long long solve(vector<int>& nums,int i,int j){
+        if(i>j) return 0;
+        if(dp[i][j]!=-1) return dp[i][j];
+        long long maxi=LLONG_MIN;
+        for(int k=i;k<=j;k++){
+            long long coin=(1ll*nums[i-1]*nums[k]*nums[j+1])+solve(nums,i,k-1)+solve(nums,k+1,j);
+            if(coin>maxi) maxi=coin;
+        }
+        return dp[i][j]=maxi;
+    }
 
     int maxCoins(vector<int>& nums) {
         int n=nums.size();
@@ -31,24 +43,24 @@ public:
         nums.insert(nums.begin(),1);
         // memoisation
 
-        // dp.resize(n+1,vector<long long>(n+1,-1));
-        // return (int)solve(nums,1,n);
+        dp.resize(n+1,vector<long long>(n+1,-1));
+        return (int)solve(nums,1,n);
 
         // tabulation
 
-        vector<vector<long long>> dp(n+2,vector<long long>(n+2,0));
-        for(int i=n;i>=1;i--){
-            for(int j=1;j<=n;j++){
-                if(i>j) continue;
-                long long mini= LLONG_MIN;
-                for(int k=i;k<=j;k++){
-                    long long coin= nums[i-1]*nums[k]*nums[j+1]+ dp[i][k-1]+ dp[k+1][j];
-                    if(coin>mini) mini=coin;
-                }
-                dp[i][j]=mini;
-            }
-        }
-        return dp[1][n];
+        // vector<vector<long long>> dp(n+2,vector<long long>(n+2,0));
+        // for(int i=n;i>=1;i--){
+        //     for(int j=1;j<=n;j++){
+        //         if(i>j) continue;
+        //         long long mini= LLONG_MIN;
+        //         for(int k=i;k<=j;k++){
+        //             long long coin= nums[i-1]*nums[k]*nums[j+1]+ dp[i][k-1]+ dp[k+1][j];
+        //             if(coin>mini) mini=coin;
+        //         }
+        //         dp[i][j]=mini;
+        //     }
+        // }
+        // return dp[1][n];
     }
 };
 auto init = atexit([]()
