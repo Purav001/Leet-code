@@ -1,6 +1,6 @@
 class Solution {
 public:
-    bool solve(string s, int &i){
+    bool solve(string s,int& i){
         if(s[i]=='t'){
             i++;
             return true;
@@ -19,16 +19,16 @@ public:
             }
             values.push_back(solve(s,i));
         }
-        i++; // skips ')'
-        if(op=='!')  return !values[0];
+        i++; // skip ')'
+        if(op=='!') return !values[0];
         if(op=='&'){
-            for (auto v:values) if(!v) return false;
+            for(auto v:values) if(!v) return false;
             return true;
         }
         if(op=='|'){
             for(auto v:values) if(v) return true;
             return false;
-        } 
+        }
         return false;
     }
     bool parseBoolExpr(string s) {
