@@ -19,7 +19,16 @@ public:
         for(int k=1;k<=60;k++){
             long long s=num1-1ll*k*num2;
             if(s<0) continue;
-            if(__builtin_popcountll(s)<=k && k<=s) return k;
+
+            // int ones=0;
+            // long long temp=s;
+            // while(temp>0){
+            //     ones+=(temp&1);
+            //     temp>>=1;
+            // }
+            // if(ones<=k) return k;
+
+            if(__builtin_popcountll(s)<=k && k<=s) return k; // using inbuilt function
         }
         return -1;
     }
