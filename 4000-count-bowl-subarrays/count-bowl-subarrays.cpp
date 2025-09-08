@@ -17,7 +17,8 @@ public:
         }
         int ans=0;
         for(int i=0;i<n;i++){
-            if(prev[i]!=-1 && next[i]!=n) ans++;
+            if(prev[i]!=-1 && (i-prev[i]+1)>=3) ans++;
+            if(next[i]!=n && (next[i]-i+1)>=3) ans++;
         }
         return ans;
     }
