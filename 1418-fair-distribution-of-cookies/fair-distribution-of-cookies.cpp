@@ -14,9 +14,9 @@ public:
         }
         for(int i=0;i<kids.size();i++){
             kids[i]+=cookies[ind];
-            if(*max_element(kids.begin(),kids.end())<ans) solve(cookies,kids,ind+1,k);
-            kids[i]-=cookies[ind];
-            if(kids[i]==0) break;
+            if(*max_element(kids.begin(),kids.end())<ans) solve(cookies,kids,ind+1,k); // pruning - if the max element exceeds the minUnfair val -> no need to discover that path
+            kids[i]-=cookies[ind]; // backtrack
+            if(kids[i]==0) break; // if the element gets 0 , then its time to try it with new children , backtrack
         }
     }
     int distributeCookies(vector<int>& cookies, int k) {
