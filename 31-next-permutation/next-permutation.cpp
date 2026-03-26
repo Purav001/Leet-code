@@ -18,7 +18,7 @@ public:
                 break;
             }
         }
-        if(bp==-1){
+        if(bp==-1){ // if the array is already descendingy sorted eg [4,3,2,1] -> [1,2,3,4]
             reverse(nums.begin(),nums.end());
             return;
         }
